@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../services/axios";
+import { createPostAPI } from "./postAPI";
+import { toast } from "react-toastify";
 
 // Fetch posts with pagination
 export const fetchPosts = createAsyncThunk(
@@ -21,6 +23,18 @@ export const toggleLike = createAsyncThunk(
     try {
       const response = await api.put(`/posts/${postId}/like`);
       return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+// Create post
+export const createPost = createAsyncThunk(
+  "post/createPost",
+  async (formData, { rejectWithValue }) => {
+    try {
+      return await createPostAPI(formData);
     } catch (error) {
       return rejectWithValue(error.response.data.message);
     }
@@ -68,10 +82,20 @@ const postSlice = createSlice({
       // Toggle like success
       .addCase(toggleLike.fulfilled, (state, action) => {
         const updatedPost = action.payload;
+        toast.success("Post like status updated");
 
         state.posts = state.posts.map((post) =>
           post._id === updatedPost._id ? updatedPost : post
         );
+      })
+
+      // Create post success
+      .addCase(createPost.fulfilled, (state, action) => {
+        state.posts = [action.payload, ...state.posts];
+        toast.success("Post created successfully");
+      })
+      .addCase(createPost.rejected, (state, action) => {
+        toast.error(action.payload || "Post creation failed");
       });
   },
 });

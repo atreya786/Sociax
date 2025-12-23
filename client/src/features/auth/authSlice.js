@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { loginAPI, signupAPI, changePasswordAPI } from "./authAPI";
+import { toast } from "react-toastify";
 
 // Login user
 export const loginUser = createAsyncThunk(
@@ -69,10 +70,12 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         sessionStorage.setItem("token", action.payload.token);
+        toast.success("Logged in successfully");
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+        toast.error(action.payload || "Login failed");
       })
 
       // Signup
@@ -85,12 +88,14 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         sessionStorage.setItem("token", action.payload.token);
+        toast.success("Account created successfully");
       })
       .addCase(signupUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+        toast.error(action.payload || "Signup failed");
       })
-      
+
       // Change password
       .addCase(changePassword.pending, (state) => {
         state.isLoading = true;
@@ -98,10 +103,12 @@ const authSlice = createSlice({
       })
       .addCase(changePassword.fulfilled, (state) => {
         state.isLoading = false;
+        toast.success("Password changed successfully");
       })
       .addCase(changePassword.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+        toast.error(action.payload || "Password change failed");
       });
   },
 });

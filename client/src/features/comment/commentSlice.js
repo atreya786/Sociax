@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../services/axios";
+import { toast } from "react-toastify";
 
 // Fetch comments for a post
 export const fetchComments = createAsyncThunk(
@@ -21,6 +22,19 @@ export const addComment = createAsyncThunk(
     try {
       const response = await api.post(`/posts/${postId}/comments`, { text });
       return { postId, comment: response.data };
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+// Delete a comment
+export const deleteComment = createAsyncThunk(
+  "comment/deleteComment",
+  async ({ postId, commentId }, { rejectWithValue }) => {
+    try {
+      await api.delete(`/posts/${postId}/comments/${commentId}`);
+      return { postId, commentId };
     } catch (error) {
       return rejectWithValue(error.response.data.message);
     }
@@ -61,8 +75,19 @@ const commentSlice = createSlice({
         if (!state.commentsByPost[postId]) {
           state.commentsByPost[postId] = [];
         }
+        toast.success("Comment added successfully");
 
         state.commentsByPost[postId].push(comment);
+      })
+
+      // Delete comment
+      .addCase(deleteComment.fulfilled, (state, action) => {
+        const { postId, commentId } = action.payload;
+        toast.info("Comment deleted successfully");
+
+        state.commentsByPost[postId] = state.commentsByPost[postId].filter(
+          (comment) => comment._id !== commentId
+        );
       });
   },
 });

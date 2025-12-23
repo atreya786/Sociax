@@ -1,6 +1,8 @@
 import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import React from "react";
+import CreatePost from "../components/post/CreatePost";
+import Loader from "../components/common/Loader";
 
 import { fetchPosts } from "../features/post/postSlice";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
@@ -48,20 +50,23 @@ const Feed = () => {
         {!isLoading && posts.length === 0 && (
           <p className="text-center text-gray-500">No posts yet</p>
         )}
-        // Posts list
-        <div className="space-y-4">
-          {posts.map((post, index) => (
-            <PostCard key={index} post={post} />
-          ))}
+        <div className="max-w-2xl mx-auto py-6">
+          <CreatePost />
+          // Posts list
+          <div className="space-y-4">
+            {posts.map((post, index) => (
+              <PostCard key={index} post={post} />
+            ))}
+          </div>
+          // Loading more indicator
+          {isLoading && posts.length === 0 && <Loader />}
+          // End message
+          {!hasMore && posts.length > 0 && (
+            <p className="text-center text-gray-500 mt-10">
+              No posts yet. Be the first to share something.
+            </p>
+          )}
         </div>
-        // Loading more indicator
-        {isLoading && posts.length > 0 && (
-          <p className="text-center text-gray-500 mt-4">Loading more...</p>
-        )}
-        // End message
-        {!hasMore && posts.length > 0 && (
-          <p className="text-center text-gray-400 mt-4">No more posts</p>
-        )}
       </div>
     </div>
   );

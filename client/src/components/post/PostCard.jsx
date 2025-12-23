@@ -17,7 +17,10 @@ const PostCard = ({ post }) => {
         <img
           src={post.image || "https://via.placeholder.com/400"}
           alt="post"
-          className="w-full object-cover max-h-100"
+          onError={(e) => {
+            e.target.src = "https://via.placeholder.com/400";
+          }}
+          className="w-full object-cover max-h-96"
         />
       </div>
       // Post content

@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changePassword } from "../features/auth/authSlice";
+import ImageUpload from "../components/common/ImageUpload";
 
 const Settings = () => {
   // Local state
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -29,7 +31,18 @@ const Settings = () => {
   return (
     <div className="max-w-xl mx-auto mt-6 bg-white p-4 rounded shadow">
       <h2 className="text-xl font-bold mb-4">Change Password</h2>
+      // Profile image upload (frontend only)
+      <div className="mb-6">
+        <h3 className="font-semibold mb-2">Profile Picture</h3>
 
+        <ImageUpload onSelect={(file) => setProfileImage(file)} />
+
+        {profileImage && (
+          <p className="text-sm text-gray-600 mt-2">
+            Image selected and ready for upload
+          </p>
+        )}
+      </div>
       <form onSubmit={handleSubmit}>
         // Current password
         <input

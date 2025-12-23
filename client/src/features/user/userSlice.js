@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../services/axios";
+import { toast } from "react-toastify";
 
 // Fetch user profile
 export const fetchUserProfile = createAsyncThunk(
@@ -57,6 +58,9 @@ const userSlice = createSlice({
       // Follow or unfollow
       .addCase(toggleFollow.fulfilled, (state, action) => {
         state.profile = action.payload;
+        toast.success(
+          action.payload.isFollowing ? "Started following" : "Unfollowed"
+        );
       });
   },
 });
