@@ -1,6 +1,7 @@
 import PostActions from "./PostActions";
 import CommentList from "./CommentList";
 import CommentInput from "./CommentInput";
+import React from "react";
 
 const PostCard = ({ post }) => {
   return (

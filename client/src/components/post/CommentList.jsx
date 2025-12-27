@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchComments } from "../../features/comment/commentSlice";
 import { deleteComment } from "../../features/comment/commentSlice";
 import Loader from "../common/Loader";
+import React from "react";
 
 const CommentList = ({ postId }) => {
   const dispatch = useDispatch();

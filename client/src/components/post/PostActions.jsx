@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { toggleLike } from "../../features/post/postSlice";
+import React from "react";
 
 const PostActions = ({ post }) => {
   const dispatch = useDispatch();

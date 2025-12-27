@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addComment } from "../../features/comment/commentSlice";
+import React from "react";
 
 const CommentInput = ({ postId }) => {
   const [text, setText] = useState("");

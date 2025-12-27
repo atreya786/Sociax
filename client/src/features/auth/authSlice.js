@@ -9,7 +9,7 @@ export const loginUser = createAsyncThunk(
     try {
       return await loginAPI(credentials);
     } catch (error) {
-      return rejectWithValue(error.response.data.message);
+      return rejectWithValue(error.response?.data?.message || "Login failed");
     }
   }
 );
@@ -19,9 +19,9 @@ export const signupUser = createAsyncThunk(
   "auth/signup",
   async (userData, { rejectWithValue }) => {
     try {
-      return await signupAPI(credentials);
+      return await signupAPI(userData);
     } catch (error) {
-      return rejectWithValue(error.response.data.message);
+      return rejectWithValue(error.response?.data?.message || "Signup failed");
     }
   }
 );
@@ -33,7 +33,9 @@ export const changePassword = createAsyncThunk(
     try {
       return await changePasswordAPI(passwordData);
     } catch (error) {
-      return rejectWithValue(error.response.data.message);
+      return rejectWithValue(
+        error.response?.data?.message || "Password update failed"
+      );
     }
   }
 );
@@ -41,7 +43,7 @@ export const changePassword = createAsyncThunk(
 // Initial state
 const initialState = {
   user: null,
-  token: null,
+  token: sessionStorage.getItem("token"),
   isLoading: false,
   error: null,
 };

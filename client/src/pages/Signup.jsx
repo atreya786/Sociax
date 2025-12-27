@@ -9,6 +9,7 @@ const Signup = () => {
   // Local state for form inputs
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
 
   // Redux hooks
   const dispatch = useDispatch();
@@ -17,23 +18,14 @@ const Signup = () => {
   // Auth state from Redux
   const { token, isLoading, error } = useSelector((state) => state.auth);
 
-  // Redirect after successful signup
-  useEffect(() => {
-    if (token) {
-      navigate("/");
-    }
-  }, [token, navigate]);
-
   // Handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(
-      signupUser({
-        email,
-        password,
-      })
-    );
+    dispatch(signupUser({ username, email, password }))
+      .unwrap()
+      .then(() => navigate("/login"));
+    console.log("submitted")
   };
 
   return (
@@ -43,6 +35,14 @@ const Signup = () => {
         className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm"
       >
         <h2 className="text-2xl font-bold text-center mb-4">Sign up</h2>
+        Create your username
+        <input
+          type="text"
+          placeholder="Username"
+          className="w-full border p-2 rounded mb-3"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
         Enter your mail
         <input
           type="email"

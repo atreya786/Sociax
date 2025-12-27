@@ -14,8 +14,6 @@ export const signupAPI = async (userData) => {
   return response.data;
 };
 
-//Change Password API
-
 // Change password API
 export const changePasswordAPI = async (passwordData) => {
   const response = await api.put("/auth/change-password", passwordData);

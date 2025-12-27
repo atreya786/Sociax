@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { toggleFollow } from "../../features/user/userSlice";
+import React from "react";
 
 const ProfileHeader = ({ profile }) => {
   const dispatch = useDispatch();

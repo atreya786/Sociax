@@ -1,4 +1,5 @@
 import { useState } from "react";
+import React from "react";
 
 const ImageUpload = ({ onSelect }) => {
   const [preview, setPreview] = useState(null);

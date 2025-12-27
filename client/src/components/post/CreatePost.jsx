@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { createPost } from "../../features/post/postSlice";
 import ImageUpload from "../common/ImageUpload";
 import { prepareImageData } from "../../services/upload";
+import React from "react";
 
 const CreatePost = () => {
   const dispatch = useDispatch();
