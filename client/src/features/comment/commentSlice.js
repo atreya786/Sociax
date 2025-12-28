@@ -7,10 +7,13 @@ export const fetchComments = createAsyncThunk(
   "comment/fetchComments",
   async (postId, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/posts/${postId}/comments`);
-      return { postId, comments: response.data };
+      // If you don’t have this backend route yet, you can remove this thunk
+      const res = await api.get(`/comments/${postId}`);
+      return { postId, comments: res.data };
     } catch (error) {
-      return rejectWithValue(error.response.data.message);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch comments"
+      );
     }
   }
 );
@@ -20,10 +23,12 @@ export const addComment = createAsyncThunk(
   "comment/addComment",
   async ({ postId, text }, { rejectWithValue }) => {
     try {
-      const response = await api.post(`/posts/${postId}/comments`, { text });
-      return { postId, comment: response.data };
+      const res = await api.post(`/comments/${postId}`, { text });
+      return { postId, comment: res.data };
     } catch (error) {
-      return rejectWithValue(error.response.data.message);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to add comment"
+      );
     }
   }
 );
@@ -33,10 +38,12 @@ export const deleteComment = createAsyncThunk(
   "comment/deleteComment",
   async ({ postId, commentId }, { rejectWithValue }) => {
     try {
-      await api.delete(`/posts/${postId}/comments/${commentId}`);
+      await api.delete(`/comments/${commentId}`);
       return { postId, commentId };
     } catch (error) {
-      return rejectWithValue(error.response.data.message);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to delete comment"
+      );
     }
   }
 );
@@ -75,19 +82,20 @@ const commentSlice = createSlice({
         if (!state.commentsByPost[postId]) {
           state.commentsByPost[postId] = [];
         }
-        toast.success("Comment added successfully");
 
         state.commentsByPost[postId].push(comment);
+        toast.success("Comment added successfully");
       })
 
       // Delete comment
       .addCase(deleteComment.fulfilled, (state, action) => {
         const { postId, commentId } = action.payload;
-        toast.info("Comment deleted successfully");
 
         state.commentsByPost[postId] = state.commentsByPost[postId].filter(
           (comment) => comment._id !== commentId
         );
+
+        toast.info("Comment deleted successfully");
       });
   },
 });
